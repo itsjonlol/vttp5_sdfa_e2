@@ -1,4 +1,9 @@
 package sg.edu.nus.iss.baccarat.server;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,9 +44,23 @@ public class ShuffleDeck {
             //deckList.add(new ArrayList<>(deck));
 
         }
+
+
+        for (List<String> list : deckList) {
+            for (String invCard : list) {
+                
+            }
+        }
        
 
         return deckList;
+    }
+    public void writeFile (String outputFileName) throws IOException {
+        File file = new File(outputFileName);
+        Writer writer = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(writer);
+        
+        
     }
 
     
