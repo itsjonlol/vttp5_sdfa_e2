@@ -1,5 +1,76 @@
 package sg.edu.nus.iss.baccarat.client;
 
+import java.io.BufferedWriter;
+import java.io.Console;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.Socket;
+import java.util.Scanner;
+
 public class ClientApp {
     
-}
+    public static void main(String[] args) throws IOException {
+
+        String[] tokens = args[0].split(":");
+        String host = tokens[0];
+
+        int port = Integer.parseInt(tokens[1]);
+        Socket sock = new Socket(host,port);
+        System.out.printf("Connected to server at %s, %d\n",host,port);
+
+        Console console = System.console();
+    
+        //k
+        OutputStream os = sock.getOutputStream();
+        DataOutputStream dos = new DataOutputStream(os);
+        Writer writer = new OutputStreamWriter(os);
+        BufferedWriter bw = new BufferedWriter(writer);
+
+        String keyboardInput  ="";
+        
+        while (!keyboardInput.equals("quit")) {
+            keyboardInput = console.readLine("Please Login, bet, or deal|B or deal|p\n");
+            System.out.println(keyboardInput);
+            if (keyboardInput.toLowerCase().equals("quit")) {
+                dos.writeUTF(keyboardInput);
+
+            } else  {
+                Scanner scan = new Scanner(keyboardInput);
+                
+                String clientOutput = "";
+                while (scan.hasNext()) {
+                    String word =scan.next();
+                    clientOutput += word + "|";
+                }
+                clientOutput = clientOutput.substring(0,clientOutput.length()-1);
+                dos.writeUTF(clientOutput.toLowerCase());
+                
+            }
+            
+            //  else if (keyboardInput.toLowerCase().equals("quit")) {
+            //     dos.writeUTF(keyboardInput);
+            // } 
+
+            dos.flush();
+
+            } 
+
+            
+        }
+        // dos.flush();
+        // dos.close();
+        // os.close();
+        // sock.close();
+
+        
+        
+        
+    }
+
+    
+
+
+    
