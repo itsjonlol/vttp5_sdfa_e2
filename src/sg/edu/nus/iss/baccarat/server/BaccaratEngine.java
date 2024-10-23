@@ -258,10 +258,34 @@ public class BaccaratEngine {
         File file = new File("gamehistory.csv");
         FileWriter writer = new FileWriter(file,false);
         BufferedWriter bw = new BufferedWriter(writer);
-        for (String result : listHistory) {
-            bw.write(result);
-            bw.write(",");
+        for (int i = 0; i < listHistory.size(); i++) {
+            // if (i == 0) {
+            //     bw.write(listHistory.get(i));
+            //     bw.write(",");
+            // }
+            
+            // if ((i%6 ==0)) {
+            //     if (i!=0){
+            //         bw.newLine();
+            //         bw.write(listHistory.get(i));
+            //         bw.write(",");
+            //     }
+            // } else{
+            //     bw.write(listHistory.get(i));
+            //     bw.write(",");
+
+            // }
+            if ((i>0) &&(i%6==0)) {
+                bw.newLine();
+            }
+            bw.write(listHistory.get(i));
+            if ((i + 1) % 6 != 0 && i != listHistory.size() - 1) {
+                bw.write(",");
+            }
+            
+            
         }
+        
         bw.flush();
         bw.close();
         

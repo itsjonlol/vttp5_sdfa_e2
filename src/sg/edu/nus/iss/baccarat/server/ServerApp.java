@@ -27,12 +27,10 @@ public class ServerApp {
             e.printStackTrace();
         }
 
-    
         ServerSocket server = new ServerSocket(port);
         System.out.printf("Server listening on port %d\n",port);
         BaccaratEngine engine = new BaccaratEngine();
         List<String> gameHistory = engine.getResultHistory();
-        
 
         while (true){
             Socket conn = server.accept();
@@ -56,11 +54,9 @@ public class ServerApp {
                     engine.setUserName(userName);
                     String amount = tokens[2];
                     engine.setStartingAmount(amount);
-                    // for (String token : tokens) {
-                    //     System.out.println(token);
-                    // }
+                    
                     engine.createDatabase(userName,amount);
-                    dos.writeUTF("Hello " + engine.getUserName());
+                    dos.writeUTF("Hello " + engine.getUserName()); // must have a write because client is reading
                     dos.flush();
                     
 
@@ -91,7 +87,6 @@ public class ServerApp {
                         dos.writeUTF(response);
                         dos.flush();
             
-
                     }
                     
                 } else if (clientInput.startsWith("deal")) {
@@ -100,8 +95,6 @@ public class ServerApp {
                     
                     String outcome = engine.initialise(); // i will know whether player or banker wins. if betWinner = P && winner>0 {add bet amount}
                     //else;subtract bet amount from kenneth db
-        
-                
                     engine.getWinner(); // if >0, player wins. if <0 banker wins.
                     String result = engine.displayOutcome(engine.getWinner());
                     String serverOutput = outcome + "\n" + result;
@@ -144,7 +137,6 @@ public class ServerApp {
                                 engine.winBet();
                                 gameHistory.add("B");
                             }
-                            
                         } else if (engine.getWinner() > 0) {
                             engine.loseBet();
                             gameHistory.add("P");
@@ -153,25 +145,12 @@ public class ServerApp {
                         }
                     }
                 
-                    
-
                 }
-            
-
-                
-
-                
-                
+        
             }
             
-
         }
         
-            
-            
-            
-        
-       
         
     }
 }
