@@ -2,8 +2,10 @@ package sg.edu.nus.iss.baccarat.client;
 
 import java.io.BufferedWriter;
 import java.io.Console;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -28,12 +30,16 @@ public class ClientApp {
         DataOutputStream dos = new DataOutputStream(os);
         Writer writer = new OutputStreamWriter(os);
         BufferedWriter bw = new BufferedWriter(writer);
+        InputStream is = sock.getInputStream();
+        DataInputStream dis = new DataInputStream(is);
 
         String keyboardInput  ="";
         
+        // String serverResponse = dis.readUTF();
         while (!keyboardInput.equals("quit")) {
             keyboardInput = console.readLine("Please Login, bet, or deal|B or deal|p\n");
             System.out.println(keyboardInput);
+            String serverResponse;
             if (keyboardInput.toLowerCase().equals("quit")) {
                 dos.writeUTF(keyboardInput);
 
@@ -47,16 +53,21 @@ public class ClientApp {
                 }
                 clientOutput = clientOutput.substring(0,clientOutput.length()-1);
                 dos.writeUTF(clientOutput.toLowerCase());
+                serverResponse = dis.readUTF();
+                System.out.println(serverResponse);
+                
                 
             }
-            
-            //  else if (keyboardInput.toLowerCase().equals("quit")) {
-            //     dos.writeUTF(keyboardInput);
-            // } 
+        
 
-            dos.flush();
+        
 
             } 
+        dos.flush();
+        dos.close();
+        os.close();
+        sock.close();
+            
 
             
         }

@@ -15,12 +15,16 @@ public class BaccaratEngine {
     List<String> betPlayer;
     List<String> betBanker;
     String betSession;
+    String startingAmount;
     List<String> cardsPlayerInitial;
     List<String> cardsBankerInitial;
+    String userName;
     int winner; // if winner > 0, it means player wins. if < 0, it means banker wins.
+    int intSumP;
+    int intSumB;
     
     public void createDatabase(String userName,String amount) throws IOException {
-        String outputFileName = userName + ".db";
+        String outputFileName = this.userName + ".db";
         File file = new File(outputFileName);
         FileWriter writer = new FileWriter(outputFileName,false);
         BufferedWriter bw = new BufferedWriter(writer);
@@ -66,7 +70,7 @@ public class BaccaratEngine {
         
     }
 
-    public void initialise() throws IOException { // initialise player and bankers with 2 cards at the start
+    public String initialise() throws IOException { // initialise player and bankers with 2 cards at the start
         cardsPlayerInitial = new ArrayList<>();
         cardsBankerInitial = new ArrayList<>();
         
@@ -84,7 +88,7 @@ public class BaccaratEngine {
 
         
 
-        int intSumP = 0;
+        intSumP = 0;
         for (String cardP : cardsPlayerInitial) {
             //System.out.println("initial card P: " + cardP);
             String pointP;
@@ -116,7 +120,7 @@ public class BaccaratEngine {
         }
         // System.out.println("Final List player sum: " + intSumP);
 
-        int intSumB = 0;
+        intSumB = 0;
         for (String cardB : cardsBankerInitial) {
             //System.out.println("initial card B: " + cardB);
             String pointB;
@@ -185,6 +189,67 @@ public class BaccaratEngine {
             System.out.println(outcome);
         }
         winner = intSumP - intSumB;
+        return outcome;
+    }
+    public String displayOutcome(int winner) {
+        
+
+       
+        String outcome = "";
+        if (winner>0) {
+
+            outcome += "Player wins with " + this.getIntSumP()+ " points, while banker has " + this.getIntSumB() + " points";
+
+        } else if (winner<0) {
+           
+            outcome += "Banker wins with " + this.getIntSumB() + " points,while player has " + this.getIntSumP() + " points";
+        } else {
+        
+            outcome += "Draw: " + this.getIntSumP() + " points";
+            
+        }
+        return outcome;
+
+
+    }
+    public void winBet() throws IOException {
+
+        Reader reader = new FileReader(this.userName + ".db");
+        BufferedReader br = new BufferedReader(reader);
+        String outputFileName = this.userName + ".db";
+        File tempFile = new File("temp" + this.userName+".db");
+        File file = new File(outputFileName);
+        String originalAmount = br.readLine();
+        String betAmount = this.getBetSession();
+        int newAmount = Integer.parseInt(originalAmount) + Integer.parseInt(betAmount);
+        String newAmountStr = String.valueOf(newAmount);
+        FileWriter writer = new FileWriter(outputFileName,false);
+        BufferedWriter bw = new BufferedWriter(writer);
+        bw.write(newAmountStr);
+        br.readLine();
+        br.close();
+        bw.close();
+
+
+    }
+    public void loseBet() throws IOException {
+
+        Reader reader = new FileReader(this.userName + ".db");
+        BufferedReader br = new BufferedReader(reader);
+        String outputFileName = this.userName + ".db";
+        File tempFile = new File("temp" + this.userName+".db");
+        File file = new File(outputFileName);
+        String originalAmount = br.readLine();
+        String betAmount = this.getBetSession();
+        int newAmount = Integer.parseInt(originalAmount) - Integer.parseInt(betAmount);
+       
+        String newAmountStr = String.valueOf(newAmount);
+        FileWriter writer = new FileWriter(outputFileName,false);
+        BufferedWriter bw = new BufferedWriter(writer);
+        bw.write(newAmountStr);
+        br.readLine();
+        br.close();
+        bw.close();
 
 
     }
@@ -214,6 +279,41 @@ public class BaccaratEngine {
     public void setBetSession(String betSession) {
         this.betSession = betSession;
     }
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public int getWinner() {
+        return winner;
+    }
+    public void setWinner(int winner) {
+        this.winner = winner;
+    }
+    public String getStartingAmount() {
+        return startingAmount;
+    }
+    public void setStartingAmount(String startingAmount) {
+        this.startingAmount = startingAmount;
+    }
+    public int getIntSumP() {
+        return intSumP;
+    }
+    public void setIntSumP(int intSumP) {
+        this.intSumP = intSumP;
+    }
+    public int getIntSumB() {
+        return intSumB;
+    }
+    public void setIntSumB(int intSumB) {
+        this.intSumB = intSumB;
+    }
+    
+    
+    
+
+    
 
 
     
