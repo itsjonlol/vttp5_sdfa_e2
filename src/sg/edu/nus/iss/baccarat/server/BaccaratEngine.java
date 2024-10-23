@@ -22,6 +22,7 @@ public class BaccaratEngine {
     int winner; // if winner > 0, it means player wins. if < 0, it means banker wins.
     int intSumP;
     int intSumB;
+    List<String> resultHistory = new ArrayList<>();
     
     public void createDatabase(String userName,String amount) throws IOException {
         String outputFileName = this.userName + ".db";
@@ -253,6 +254,18 @@ public class BaccaratEngine {
 
 
     }
+    public void writeGameHistory(List<String> listHistory) throws IOException {
+        File file = new File("gamehistory.csv");
+        FileWriter writer = new FileWriter(file,false);
+        BufferedWriter bw = new BufferedWriter(writer);
+        for (String result : listHistory) {
+            bw.write(result);
+            bw.write(",");
+        }
+        bw.flush();
+        bw.close();
+        
+    }
 
    
 
@@ -308,6 +321,12 @@ public class BaccaratEngine {
     }
     public void setIntSumB(int intSumB) {
         this.intSumB = intSumB;
+    }
+    public List<String> getResultHistory() {
+        return resultHistory;
+    }
+    public void setResultHistory(List<String> resultHistory) {
+        this.resultHistory = resultHistory;
     }
     
     

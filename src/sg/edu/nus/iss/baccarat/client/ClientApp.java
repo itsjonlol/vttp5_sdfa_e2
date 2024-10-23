@@ -38,7 +38,7 @@ public class ClientApp {
         // String serverResponse = dis.readUTF();
         while (!keyboardInput.equals("quit")) {
             keyboardInput = console.readLine("Please Login, bet, or deal|B or deal|p\n");
-            System.out.println(keyboardInput);
+            //System.out.println(keyboardInput);
             String serverResponse;
             if (keyboardInput.toLowerCase().equals("quit")) {
                 dos.writeUTF(keyboardInput);
@@ -58,10 +58,7 @@ public class ClientApp {
                 
                 
             }
-        
-
-        
-
+    
             } 
         dos.flush();
         dos.close();

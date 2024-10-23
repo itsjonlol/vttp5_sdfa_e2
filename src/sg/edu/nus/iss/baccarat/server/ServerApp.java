@@ -31,6 +31,8 @@ public class ServerApp {
         ServerSocket server = new ServerSocket(port);
         System.out.printf("Server listening on port %d\n",port);
         BaccaratEngine engine = new BaccaratEngine();
+        List<String> gameHistory = engine.getResultHistory();
+        
 
         while (true){
             Socket conn = server.accept();
@@ -45,6 +47,7 @@ public class ServerApp {
 
                 String clientInput = dis.readUTF();
                 System.out.println(clientInput);
+                
 
                 if (clientInput.startsWith("login")) {
                     System.out.println(clientInput.length());
@@ -57,13 +60,17 @@ public class ServerApp {
                     //     System.out.println(token);
                     // }
                     engine.createDatabase(userName,amount);
-                    dos.writeUTF("hi");
+                    dos.writeUTF("Hello " + engine.getUserName());
                     dos.flush();
                     
 
 
                 } else if (clientInput.equals("quit")) {
                     System.out.println("Client has closed connecton. Server closing...");
+                    for (String history : gameHistory) {
+                        System.out.println(history);
+                    }
+                    engine.writeGameHistory(gameHistory);
                     conn.close();
                     System.exit(-1);
 
@@ -104,6 +111,7 @@ public class ServerApp {
                     if (betWinner.toLowerCase().equals("p")) {
                         if (engine.getWinner() > 0) {
                             engine.winBet();
+                            gameHistory.add("P");
                         } else if (engine.getWinner() <0) {
                             if (engine.getIntSumB() == 6) {
                                 System.out.println("Banker won with 6 points");
@@ -111,12 +119,17 @@ public class ServerApp {
                                 currentBetSession = currentBetSession/2;
                                 engine.setBetSession(String.valueOf(currentBetSession));
                                 engine.loseBet();
+                                gameHistory.add("B");
 
                             } else {
                                 engine.loseBet();
+                                gameHistory.add("B");
                             }
                             
+                        } else {
+                            gameHistory.add("D");
                         }
+                        
                     }  else if ((betWinner.toLowerCase().equals("b"))) {
                         if (engine.getWinner() < 0) {
                             if (engine.getIntSumB()== 6) {
@@ -125,13 +138,18 @@ public class ServerApp {
                                 currentBetSession = currentBetSession/2;
                                 engine.setBetSession(String.valueOf(currentBetSession));
                                 engine.winBet();
+                                gameHistory.add("B");
 
                             }else {
                                 engine.winBet();
+                                gameHistory.add("B");
                             }
                             
                         } else if (engine.getWinner() > 0) {
                             engine.loseBet();
+                            gameHistory.add("P");
+                        } else {
+                            gameHistory.add("D");
                         }
                     }
                 
